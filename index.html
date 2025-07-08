@@ -161,15 +161,19 @@
       </fieldset>
 
       <!-- Submitted By -->
-      <fieldset>
-        <legend>Submitted By</legend>
+<fieldset>
+  <legend>Submitted By</legend>
 
-        <label>Sales Executive:</label>
-        <input type="text" name="sales_exec" />
+  <label>Sales Executive:</label>
+  <input type="text" name="sales_exec" />
 
-        <label>Date:</label>
-        <input type="date" name="submitted_date" placeholder="Select date..." />
-      </fieldset>
+  <label>Reference Number:</label>
+  <input type="text" name="reference_number" placeholder="MSQ-YYMM-001" />
+
+  <label>Date:</label>
+  <input type="date" name="submitted_date" placeholder="Select date..." />
+</fieldset>
+
 
       <button type="submit">Submit Form</button>
     </form>
@@ -217,7 +221,25 @@
       alert('Failed to submit form: ' + err.message);
     });
   });
+
+
+  // Auto-fill MSQ-YYMM- on page load
+  window.addEventListener('DOMContentLoaded', function () {
+    const refField = document.getElementById('reference_number');
+    if (refField) {
+      const now = new Date();
+      const year = String(now.getFullYear()).slice(2); // '25'
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // '07'
+      const prefix = `MSQ-${year}${month}-`;
+
+      // Only fill if field is empty
+      if (!refField.value) {
+        refField.value = prefix;
+      }
+    }
+  });
 </script>
+
 
 
 </body>
