@@ -175,60 +175,57 @@
     </form>
   </div>
 
-  <!-- 🔁 JavaScript: Bullets + Webhook Submit -->
-  <script>
-    // Auto bullet on Enter
-    document.querySelectorAll('.bulleted').forEach(textarea => {
-      textarea.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          const cursorPos = this.selectionStart;
-          const value = this.value;
-          const before = value.substring(0, cursorPos);
-          const after = value.substring(cursorPos);
-          this.value = before + '\n• ' + after;
-          this.selectionStart = this.selectionEnd = cursorPos + 3;
-        }
-      });
-
-      textarea.addEventListener('focus', function () {
-        if (this.value.trim() === '') {
-          this.value = '• ';
-        }
-      });
+<script>
+  document.querySelectorAll('.bulleted').forEach(textarea => {
+    textarea.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const cursorPos = this.selectionStart;
+        const value = this.value;
+        const before = value.substring(0, cursorPos);
+        const after = value.substring(cursorPos);
+        this.value = before + '\n• ' + after;
+        this.selectionStart = this.selectionEnd = cursorPos + 3;
+      }
     });
 
-    // 🚀 Submit via Webhook
-    document.getElementById('myForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const form = e.target;
-      const data = new FormData(form);
-      const json = {};
-
-      data.forEach((value, key) => {
-        json[key] = value;
-      });
-
-      fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', {  
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(json)
-      })
-      .then(response => {
-        if (response.ok) {
-          alert('Form submitted successfully!');
-          form.reset();
-        } else {
-          alert('Error submitting form.');
-        }
-      })
-      .catch(err => {
-        alert('Failed to submit form: ' + err.message);
-      });
+    textarea.addEventListener('focus', function () {
+      if (this.value.trim() === '') {
+        this.value = '• ';
+      }
     });
-  </script>
+  });
+
+  document.getElementById('myForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const data = new FormData(form);
+    const json = {};
+
+    data.forEach((value, key) => {
+      json[key] = value;
+    });
+
+    fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', { // 🔁 Replace with your actual webhook
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(json)
+    })
+    .then(response => {
+      if (response.ok) {
+        window.location.href = "success.html";  // ✅ redirect on success
+      } else {
+        alert('Error submitting form.');
+      }
+    })
+    .catch(err => {
+      alert('Failed to submit form: ' + err.message);
+    });
+  });
+</script>
+
 </body>
 </html>
