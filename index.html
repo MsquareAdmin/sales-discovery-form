@@ -106,17 +106,17 @@
       <fieldset>
         <legend>Client Information</legend>
         <label>Company Name:</label>
-        <input type="text" name="company_name" required />
+        <input type="text" name="company_name" />
 
         <label>Industry:</label>
-        <input type="text" name="industry" required />
+        <input type="text" name="industry" />
 
         <label>Location:</label>
-        <input type="text" name="location" required />
+        <input type="text" name="location" />
 
         <label>Priority Level:</label>
         <div class="radio-group">
-          <label><input type="radio" name="priority" value="High" required> High</label>
+          <label><input type="radio" name="priority" value="High"> High</label>
           <label><input type="radio" name="priority" value="Medium"> Medium</label>
           <label><input type="radio" name="priority" value="Low"> Low</label>
         </div>
@@ -167,12 +167,11 @@
         <label>Sales Executive:</label>
         <input type="text" name="sales_exec" />
 
-<label>Reference Number:</label>
-<div style="display: flex; gap: 5px;">
-  <input type="text" id="ref_prefix" value="MSQ-" readonly style="width: 120px;" />
-  <input type="text" id="ref_number_input" name="reference_number" placeholder="YYMM-001" style="flex: 1;" />
-</div>
-
+        <label>Reference Number:</label>
+        <div style="display: flex; gap: 5px;">
+          <input type="text" id="ref_prefix" value="MSQ-" readonly style="width: 120px;" />
+          <input type="text" id="ref_number_input" name="reference_number" placeholder="YYMM-001" style="flex: 1;" />
+        </div>
 
         <label>Date:</label>
         <input type="date" name="submitted_date" placeholder="Select date..." />
@@ -183,65 +182,65 @@
   </div>
 
   <!-- ✅ JavaScript -->
-<script>
-  // Auto bullets
-  document.querySelectorAll('.bulleted').forEach(textarea => {
-    textarea.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const cursorPos = this.selectionStart;
-        const value = this.value;
-        const before = value.substring(0, cursorPos);
-        const after = value.substring(cursorPos);
-        this.value = before + '\n• ' + after;
-        this.selectionStart = this.selectionEnd = cursorPos + 3;
-      }
+  <script>
+    // Auto bullets
+    document.querySelectorAll('.bulleted').forEach(textarea => {
+      textarea.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const cursorPos = this.selectionStart;
+          const value = this.value;
+          const before = value.substring(0, cursorPos);
+          const after = value.substring(cursorPos);
+          this.value = before + '\n• ' + after;
+          this.selectionStart = this.selectionEnd = cursorPos + 3;
+        }
+      });
+
+      textarea.addEventListener('focus', function () {
+        if (this.value.trim() === '') {
+          this.value = '• ';
+        }
+      });
     });
 
-    textarea.addEventListener('focus', function () {
-      if (this.value.trim() === '') {
-        this.value = '• ';
-      }
+    // Auto-fill Reference Prefix with MSQ-YYMM-
+    window.addEventListener('DOMContentLoaded', function () {
+      const refPrefix = document.getElementById('ref_prefix');
+      const now = new Date();
+      const year = String(now.getFullYear()).slice(2); // "25"
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // "07"
+      refPrefix.value = `MSQ-${year}${month}-`;
     });
-  });
 
-  // Auto-fill Reference Prefix with MSQ-YYMM-
-  window.addEventListener('DOMContentLoaded', function () {
-    const refPrefix = document.getElementById('ref_prefix');
-    const now = new Date();
-    const year = String(now.getFullYear()).slice(2); // "25"
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // "07"
-    refPrefix.value = `MSQ-${year}${month}-`;
-  });
+    // Webhook submission
+    document.getElementById('myForm').addEventListener('submit', function (e) {
+      e.preventDefault();
 
-  // Webhook submission
-  document.getElementById('myForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
 
-    const form = e.target;
-    const data = new FormData(form);
+      // Combine ref prefix + user number
+      const prefix = document.getElementById('ref_prefix').value;
+      const numberPart = document.getElementById('ref_number_input').value;
+      data.delete('reference_number');
+      data.set('reference_number', prefix + numberPart);
 
-    // Combine ref prefix + user number
-    const prefix = document.getElementById('ref_prefix').value;
-    const numberPart = document.getElementById('ref_number_input').value;
-    data.set('reference_number', prefix + numberPart);
-
-    fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', {
-      method: 'POST',
-      body: data
-    })
-    .then(response => {
-      if (response.ok) {
-        window.location.href = "success.html";
-      } else {
-        alert('Error submitting form.');
-      }
-    })
-    .catch(err => {
-      alert('Failed to submit form: ' + err.message);
+      fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', {
+        method: 'POST',
+        body: data
+      })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = "success.html";
+        } else {
+          alert('Error submitting form.');
+        }
+      })
+      .catch(err => {
+        alert('Failed to submit form: ' + err.message);
+      });
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
