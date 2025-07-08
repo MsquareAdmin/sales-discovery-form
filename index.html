@@ -200,23 +200,15 @@
     e.preventDefault();
 
     const form = e.target;
-    const data = new FormData(form);
-    const json = {};
+    const data = new FormData(form); // keep it as FormData
 
-    data.forEach((value, key) => {
-      json[key] = value;
-    });
-
-    fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', { // 🔁 Replace with your actual webhook
+    fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', { // ✅ replace this
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(json)
+      body: data // ✅ no headers, no JSON.stringify
     })
     .then(response => {
       if (response.ok) {
-        window.location.href = "success.html";  // ✅ redirect on success
+        window.location.href = "success.html";
       } else {
         alert('Error submitting form.');
       }
@@ -226,6 +218,7 @@
     });
   });
 </script>
+
 
 </body>
 </html>
