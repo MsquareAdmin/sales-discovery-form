@@ -50,7 +50,8 @@
     input[type="text"],
     input[type="date"],
     input[type="file"],
-    textarea {
+    textarea,
+    select {
       width: 100%;
       padding: 10px;
       margin-top: 3px;
@@ -95,6 +96,10 @@
     button:hover {
       background-color: #1a242f;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -109,7 +114,17 @@
         <input type="text" name="company_name" />
 
         <label>Industry:</label>
-        <input type="text" name="industry" />
+        <select name="industry" id="industry">
+          <option value="">Select industry</option>
+          <option>IT</option>
+          <option>Real Estate</option>
+          <option>Manufacturing</option>
+          <option>Healthcare</option>
+          <option>Education</option>
+          <option>Finance</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="industry_other" id="industry_other" class="hidden" placeholder="Please specify industry..." />
 
         <label>Location:</label>
         <input type="text" name="location" />
@@ -130,8 +145,9 @@
         <textarea class="bulleted" name="automation_goal" rows="4"></textarea>
 
         <label>Current Workflow:</label>
-        <input type="text" name="current_workflow_text" placeholder="Describe the current process..." />
-        <br /><br />
+        <textarea name="current_workflow_text" rows="3" placeholder="Describe the current process..."></textarea>
+
+        <label>Workflow Image:</label>
         <input type="file" name="workflow_image" accept="image/*" />
 
         <label>Pain Points:</label>
@@ -151,7 +167,13 @@
         <input type="text" name="existing_apps" />
 
         <label>Preferred Automation Platform:</label>
-        <input type="text" name="preferred_platforms" />
+        <select name="preferred_platforms" id="preferred_platforms">
+          <option value="">Select platform</option>
+          <option>Make</option>
+          <option>N8N</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="preferred_platforms_other" id="preferred_platforms_other" class="hidden" placeholder="Please specify other platform..." />
       </fieldset>
 
       <!-- Additional Notes -->
@@ -165,10 +187,15 @@
         <legend>Submitted By</legend>
 
         <label>Sales Executive:</label>
-        <input type="text" name="sales_exec" />
-<label>Reference Number:</label>
-<input type="text" id="reference_number" name="reference_number" />
+        <select name="sales_exec">
+          <option value="">Select</option>
+          <option>Jerjish</option>
+          <option>Sreeram</option>
+          <option>Ashwin</option>
+        </select>
 
+        <label>Reference Number:</label>
+        <input type="text" id="reference_number" name="reference_number" />
 
         <label>Date:</label>
         <input type="date" name="submitted_date" placeholder="Select date..." />
@@ -178,57 +205,64 @@
     </form>
   </div>
 
-  <!-- ✅ JavaScript -->
 <script>
-  // Auto bullets
-  document.querySelectorAll('.bulleted').forEach(textarea => {
-    textarea.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
+  document.addEventListener('DOMContentLoaded', function () {
+    // Disable Enter key from submitting the form
+    document.getElementById('myForm').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
         e.preventDefault();
-        const cursorPos = this.selectionStart;
-        const value = this.value;
-        const before = value.substring(0, cursorPos);
-        const after = value.substring(cursorPos);
-        this.value = before + '\n• ' + after;
-        this.selectionStart = this.selectionEnd = cursorPos + 3;
       }
     });
 
-    textarea.addEventListener('focus', function () {
-      if (this.value.trim() === '') {
-        this.value = '• ';
-      }
+    // Show/hide "Other" text field for industry
+    document.getElementById('industry').addEventListener('change', function () {
+      document.getElementById('industry_other').classList.toggle('hidden', this.value !== 'Other');
     });
-  });
 
-  // Reference number prefill and lock prefix
-  window.addEventListener('DOMContentLoaded', function () {
+    // Show/hide "Other" text field for preferred platform
+    document.getElementById('preferred_platforms').addEventListener('change', function () {
+      document.getElementById('preferred_platforms_other').classList.toggle('hidden', this.value !== 'Other');
+    });
+
+    // Auto-fill reference number prefix
     const refInput = document.getElementById('reference_number');
     const now = new Date();
-    const year = String(now.getFullYear()).slice(2); // '25'
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // '07'
+    const year = String(now.getFullYear()).slice(2);
+    const month = String(now.getMonth() + 1).padStart(2, '0');
     const prefix = `MSQ-${year}${month}-`;
-
     refInput.value = prefix;
-
-    // Prevent deleting or editing prefix
     refInput.addEventListener('keydown', function (e) {
       const prefixLength = prefix.length;
-      if (
-        this.selectionStart < prefixLength ||
-        (e.key === 'Backspace' && this.selectionStart <= prefixLength)
-      ) {
+      if (this.selectionStart < prefixLength || (e.key === 'Backspace' && this.selectionStart <= prefixLength)) {
         e.preventDefault();
       }
     });
-
     refInput.addEventListener('paste', e => e.preventDefault());
+
+    // Auto bullets
+    document.querySelectorAll('.bulleted').forEach(textarea => {
+      textarea.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const cursorPos = this.selectionStart;
+          const value = this.value;
+          const before = value.substring(0, cursorPos);
+          const after = value.substring(cursorPos);
+          this.value = before + '\n\u2022 ' + after;
+          this.selectionStart = this.selectionEnd = cursorPos + 3;
+        }
+      });
+
+      textarea.addEventListener('focus', function () {
+        if (this.value.trim() === '') {
+          this.value = '\u2022 ';
+        }
+      });
+    });
   });
 
-  // Submit with reference number
   document.getElementById('myForm').addEventListener('submit', function (e) {
     e.preventDefault();
-
     const form = e.target;
     const data = new FormData(form);
 
@@ -255,8 +289,5 @@
     });
   });
 </script>
-
-
-
 </body>
 </html>
