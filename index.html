@@ -180,7 +180,7 @@
 
   <!-- ✅ JavaScript -->
 <script>
-  // Auto bullets
+  // Auto bullets for textareas
   document.querySelectorAll('.bulleted').forEach(textarea => {
     textarea.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
@@ -201,7 +201,7 @@
     });
   });
 
-  // Reference number prefill and lock prefix
+  // Lock reference number prefix
   window.addEventListener('DOMContentLoaded', function () {
     const refInput = document.getElementById('reference_number');
     const now = new Date();
@@ -209,14 +209,17 @@
     const month = String(now.getMonth() + 1).padStart(2, '0'); // '07'
     const prefix = `MSQ-${year}${month}-`;
 
+    // Prefill field with prefix
     refInput.value = prefix;
 
-    // Prevent deleting or editing prefix
+    // Prevent editing the prefix
     refInput.addEventListener('keydown', function (e) {
+      const cursorPos = this.selectionStart;
       const prefixLength = prefix.length;
+
       if (
-        this.selectionStart < prefixLength ||
-        (e.key === 'Backspace' && this.selectionStart <= prefixLength)
+        cursorPos < prefixLength ||  // Prevent typing before prefix
+        (e.key === 'Backspace' && cursorPos <= prefixLength) // Prevent deleting prefix
       ) {
         e.preventDefault();
       }
@@ -225,7 +228,7 @@
     refInput.addEventListener('paste', e => e.preventDefault());
   });
 
-  // Submit with reference number
+  // Webhook submit
   document.getElementById('myForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -255,6 +258,7 @@
     });
   });
 </script>
+
 
 </body>
 </html>
