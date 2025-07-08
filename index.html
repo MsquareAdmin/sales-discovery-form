@@ -166,12 +166,9 @@
 
         <label>Sales Executive:</label>
         <input type="text" name="sales_exec" />
+<label>Reference Number:</label>
+<input type="text" id="reference_number" name="reference_number" />
 
-        <label>Reference Number:</label>
-        <div style="display: flex; gap: 5px;">
-          <input type="text" id="ref_prefix" value="MSQ-" readonly style="width: 120px;" />
-          <input type="text" id="ref_number_input" name="reference_number" placeholder="YYMM-001" style="flex: 1;" />
-        </div>
 
         <label>Date:</label>
         <input type="date" name="submitted_date" placeholder="Select date..." />
@@ -182,72 +179,82 @@
   </div>
 
   <!-- ✅ JavaScript -->
-  <script>
-    // Auto bullets
-    document.querySelectorAll('.bulleted').forEach(textarea => {
-      textarea.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          const cursorPos = this.selectionStart;
-          const value = this.value;
-          const before = value.substring(0, cursorPos);
-          const after = value.substring(cursorPos);
-          this.value = before + '\n• ' + after;
-          this.selectionStart = this.selectionEnd = cursorPos + 3;
-        }
-      });
-
-      textarea.addEventListener('focus', function () {
-        if (this.value.trim() === '') {
-          this.value = '• ';
-        }
-      });
+<script>
+  // Auto bullets
+  document.querySelectorAll('.bulleted').forEach(textarea => {
+    textarea.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const cursorPos = this.selectionStart;
+        const value = this.value;
+        const before = value.substring(0, cursorPos);
+        const after = value.substring(cursorPos);
+        this.value = before + '\n• ' + after;
+        this.selectionStart = this.selectionEnd = cursorPos + 3;
+      }
     });
 
-    // Auto-fill Reference Prefix with MSQ-YYMM-
-    window.addEventListener('DOMContentLoaded', function () {
-      const refPrefix = document.getElementById('ref_prefix');
-      const now = new Date();
-      const year = String(now.getFullYear()).slice(2); // "25"
-      const month = String(now.getMonth() + 1).padStart(2, '0'); // "07"
-      refPrefix.value = `MSQ-${year}${month}-`;
+    textarea.addEventListener('focus', function () {
+      if (this.value.trim() === '') {
+        this.value = '• ';
+      }
+    });
+  });
+
+  // Reference number prefill and lock prefix
+  window.addEventListener('DOMContentLoaded', function () {
+    const refInput = document.getElementById('reference_number');
+    const now = new Date();
+    const year = String(now.getFullYear()).slice(2); // '25'
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // '07'
+    const prefix = `MSQ-${year}${month}-`;
+
+    refInput.value = prefix;
+
+    // Prevent deleting or editing prefix
+    refInput.addEventListener('keydown', function (e) {
+      const prefixLength = prefix.length;
+      if (
+        this.selectionStart < prefixLength ||
+        (e.key === 'Backspace' && this.selectionStart <= prefixLength)
+      ) {
+        e.preventDefault();
+      }
     });
 
-    // Webhook submission
-    document.getElementById('myForm').addEventListener('submit', function (e) {
-      e.preventDefault();
+    refInput.addEventListener('paste', e => e.preventDefault());
+  });
 
-      const form = e.target;
-      const data = new FormData(form);
+  // Submit with reference number
+  document.getElementById('myForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-      // Combine ref prefix + user number
-      const prefix = document.getElementById('ref_prefix').value;
-      const numberPart = document.getElementById('ref_number_input').value;
-      data.delete('reference_number');
-      data.set('reference_number', prefix + numberPart);
+    const form = e.target;
+    const data = new FormData(form);
 
-      fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', {
-        method: 'POST',
-        body: data
-      })
-      .then(response => {
-        if (response.ok) {
-          document.querySelector(".container").innerHTML = `
-            <div style="text-align: center; padding: 60px;">
-              <h2 style="color: green;">✅ Form submitted successfully!</h2>
-              <p>Thank you. Your submission has been received.</p>
-              <a href="" style="display: inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
-                Submit Another Response
-              </a>
-            </div>`;
-        } else {
-          alert('Error submitting form.');
-        }
-      })
-      .catch(err => {
-        alert('Failed to submit form: ' + err.message);
-      });
+    fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', {
+      method: 'POST',
+      body: data
+    })
+    .then(response => {
+      if (response.ok) {
+        document.querySelector(".container").innerHTML = `
+          <div style="text-align: center; padding: 60px;">
+            <h2 style="color: green;">✅ Form submitted successfully!</h2>
+            <p>Thank you. Your submission has been received.</p>
+            <a href="" style="display: inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
+              Submit Another Response
+            </a>
+          </div>`;
+      } else {
+        alert('Error submitting form.');
+      }
+    })
+    .catch(err => {
+      alert('Failed to submit form: ' + err.message);
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
