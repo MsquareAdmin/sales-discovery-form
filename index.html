@@ -101,8 +101,7 @@
   <div class="container">
     <h2>Sales Discovery Call Form</h2>
 
-    <form action="/submit" method="POST" enctype="multipart/form-data">
-
+    <form id="myForm">
       <!-- Client Information -->
       <fieldset>
         <legend>Client Information</legend>
@@ -142,8 +141,7 @@
         <textarea class="bulleted" name="desired_automation" rows="4"></textarea>
 
         <label>Volume/Frequency:</label>
-<input type="text" name="volume_frequency"  />
-
+        <input type="text" name="volume_frequency" placeholder="e.g., 50 invoices/day" />
       </fieldset>
 
       <!-- Technical Considerations -->
@@ -177,8 +175,9 @@
     </form>
   </div>
 
+  <!-- 🔁 JavaScript: Bullets + Webhook Submit -->
   <script>
-    // Add bullets automatically in textareas with class "bulleted"
+    // Auto bullet on Enter
     document.querySelectorAll('.bulleted').forEach(textarea => {
       textarea.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
@@ -199,7 +198,7 @@
       });
     });
 
-     // Webhook submit
+    // 🚀 Submit via Webhook
     document.getElementById('myForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
@@ -211,7 +210,7 @@
         json[key] = value;
       });
 
-      fetch('https://hook.eu1.make.com/rg3z1xzvpwby5jriaytgooq2dxs8kr1k', {  // <-- Replace this URL
+      fetch('https://hook.eu1.make.com/your-webhook-id', {  // 🔁 Replace with your actual webhook
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
