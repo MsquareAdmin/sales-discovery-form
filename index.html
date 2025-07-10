@@ -162,13 +162,12 @@
   <div class="container">
     <h2>Sales Discovery Call Form</h2>
 
-    <div class="spacer-row"></div>
-    <div class="reference-number-below">
-      <label for="reference_number">Reference Number:</label>
-      <input type="text" id="reference_number" name="reference_number" placeholder="MSQ-YYMM-###" />
-    </div>
-
     <form id="myForm">
+      <div class="reference-number-below">
+        <label for="reference_number">Reference Number:</label>
+        <input type="text" id="reference_number" name="reference_number" placeholder="MSQ-YYMM-###" />
+      </div>
+
       <fieldset>
         <legend>Client Information</legend>
         <label>Company Name:</label>
@@ -206,33 +205,33 @@
       <fieldset>
         <legend>Automation Requirements & Details</legend>
         <label>Automation Goal:</label>
-        <textarea class="bulleted" name="automation_goal" rows="4" required placeholder="e.g.,To streamline client onboarding and document processing for faster turnaround and reduced manual errors."></textarea>
+        <textarea class="bulleted" name="automation_goal" rows="4" required></textarea>
 
         <label>Current Workflow:</label>
-        <textarea name="current_workflow_text" rows="3" placeholder="e.g., Sales team manually collects onboarding details, fills Excel sheets, scans ID proofs, and sends to operations team."></textarea>
+        <textarea name="current_workflow_text" rows="3"></textarea>
 
         <label>Upload Process Diagram (if available):</label>
         <input type="file" name="workflow_image" accept="image/*" />
 
         <label>Pain Points:</label>
-        <textarea class="bulleted" name="pain_points" rows="4" placeholder="e.g., Delays due to back-and-forth, loss of documents, manual errors, lack of visibility on onboarding status."></textarea>
+        <textarea class="bulleted" name="pain_points" rows="4"></textarea>
 
         <label>Desired Automation Steps (if known):</label>
-        <textarea class="bulleted" name="desired_automation" rows="4" placeholder="e.g., A form-based onboarding system that collects client data, stores it in Google Sheets, triggers document uploads to Drive, and alerts ops via Slack."></textarea>
+        <textarea class="bulleted" name="desired_automation" rows="4"></textarea>
 
         <label>Volume/Frequency:</label>
-        <input type="text" name="volume_frequency" placeholder="e.g., 20-25 onboardings per week" />
+        <input type="text" name="volume_frequency" />
       </fieldset>
 
       <fieldset>
         <legend>Technical Considerations</legend>
         <label>Existing Apps/Tools Used:</label>
-        <input type="text" name="existing_apps" placeholder="e.g., Google Sheets, Drive, Slack, JotForm" />
+        <input type="text" name="existing_apps" />
 
         <label>Preferred Automation Platform:</label>
         <select name="preferred_platforms" id="preferred_platforms">
           <option value="">Select platform</option>
-          <option >Make</option>
+          <option>Make</option>
           <option>N8N</option>
           <option value="Other">Other</option>
         </select>
@@ -241,7 +240,7 @@
 
       <fieldset>
         <legend>Additional Notes</legend>
-        <textarea name="additional_notes" rows="5" placeholder="Write any additional notes here..."></textarea>
+        <textarea name="additional_notes" rows="5"></textarea>
       </fieldset>
 
       <fieldset>
@@ -255,7 +254,7 @@
         </select>
 
         <label>Date:</label>
-        <input type="date" name="submitted_date" placeholder="Select date..." required />
+        <input type="date" name="submitted_date" required />
       </fieldset>
 
       <fieldset class="hidden">
@@ -274,20 +273,6 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('myForm').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-          e.preventDefault();
-        }
-      });
-
-      document.getElementById('industry').addEventListener('change', function () {
-        document.getElementById('industry_other').classList.toggle('hidden', this.value !== 'Other');
-      });
-
-      document.getElementById('preferred_platforms').addEventListener('change', function () {
-        document.getElementById('preferred_platforms_other').classList.toggle('hidden', this.value !== 'Other');
-      });
-
       const refInput = document.getElementById('reference_number');
       const now = new Date();
       const year = now.getFullYear().toString().slice(-2);
@@ -304,6 +289,14 @@
         }
       });
       refInput.addEventListener('paste', e => e.preventDefault());
+
+      document.getElementById('industry').addEventListener('change', function () {
+        document.getElementById('industry_other').classList.toggle('hidden', this.value !== 'Other');
+      });
+
+      document.getElementById('preferred_platforms').addEventListener('change', function () {
+        document.getElementById('preferred_platforms_other').classList.toggle('hidden', this.value !== 'Other');
+      });
 
       document.querySelectorAll('.bulleted').forEach(textarea => {
         textarea.addEventListener('keydown', function (e) {
