@@ -69,6 +69,7 @@
     input::placeholder,
     textarea::placeholder {
       color: #999;
+      font-style: italic;
     }
 
     .priority-buttons {
@@ -205,33 +206,33 @@
       <fieldset>
         <legend>Automation Requirements & Details</legend>
         <label>Automation Goal:</label>
-        <textarea class="bulleted" name="automation_goal" rows="4" required></textarea>
+        <textarea class="bulleted" name="automation_goal" rows="4" required placeholder="e.g.,To streamline client onboarding and document processing for faster turnaround and reduced manual errors."></textarea>
 
         <label>Current Workflow:</label>
-        <textarea name="current_workflow_text" rows="3" placeholder="Describe existing manual process"></textarea>
+        <textarea name="current_workflow_text" rows="3" placeholder="e.g., Sales team manually collects onboarding details, fills Excel sheets, scans ID proofs, and sends to operations team."></textarea>
 
         <label>Upload Process Diagram (if available):</label>
         <input type="file" name="workflow_image" accept="image/*" />
 
         <label>Pain Points:</label>
-        <textarea class="bulleted" name="pain_points" rows="4"></textarea>
+        <textarea class="bulleted" name="pain_points" rows="4" placeholder="e.g., Delays due to back-and-forth, loss of documents, manual errors, lack of visibility on onboarding status."></textarea>
 
         <label>Desired Automation Steps (if known):</label>
-        <textarea class="bulleted" name="desired_automation" rows="4" placeholder="e.g., Automatically send invoices from Gmail to Tally"></textarea>
+        <textarea class="bulleted" name="desired_automation" rows="4" placeholder="e.g., A form-based onboarding system that collects client data, stores it in Google Sheets, triggers document uploads to Drive, and alerts ops via Slack."></textarea>
 
         <label>Volume/Frequency:</label>
-        <input type="text" name="volume_frequency" placeholder="e.g., 50 invoices/day" />
+        <input type="text" name="volume_frequency" placeholder="e.g., 20-25 onboardings per week" />
       </fieldset>
 
       <fieldset>
         <legend>Technical Considerations</legend>
         <label>Existing Apps/Tools Used:</label>
-        <input type="text" name="existing_apps" />
+        <input type="text" name="existing_apps" placeholder="e.g., Google Sheets, Drive, Slack, JotForm" />
 
         <label>Preferred Automation Platform:</label>
         <select name="preferred_platforms" id="preferred_platforms">
           <option value="">Select platform</option>
-          <option>Make</option>
+          <option >Make</option>
           <option>N8N</option>
           <option value="Other">Other</option>
         </select>
@@ -273,14 +274,12 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Prevent Enter from submitting form unless in textarea
       document.getElementById('myForm').addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
           e.preventDefault();
         }
       });
 
-      // Show/hide "Other" fields
       document.getElementById('industry').addEventListener('change', function () {
         document.getElementById('industry_other').classList.toggle('hidden', this.value !== 'Other');
       });
@@ -289,7 +288,6 @@
         document.getElementById('preferred_platforms_other').classList.toggle('hidden', this.value !== 'Other');
       });
 
-      // Dynamic Reference Number
       const refInput = document.getElementById('reference_number');
       const now = new Date();
       const year = now.getFullYear().toString().slice(-2);
@@ -307,7 +305,6 @@
       });
       refInput.addEventListener('paste', e => e.preventDefault());
 
-      // Auto bullets
       document.querySelectorAll('.bulleted').forEach(textarea => {
         textarea.addEventListener('keydown', function (e) {
           if (e.key === 'Enter') {
@@ -328,10 +325,8 @@
         });
       });
 
-      // Single submit handler
       document.getElementById('myForm').addEventListener('submit', function (e) {
         e.preventDefault();
-
         const refValue = refInput.value.trim();
         const numberPart = refValue.split('-').pop();
         const refPattern = /^MSQ-\d{4}-\d{3}$/;
