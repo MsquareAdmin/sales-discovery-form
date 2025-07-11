@@ -174,10 +174,10 @@
 
       <fieldset>
         <legend>Client Information</legend>
-        <label>Company Name:</label>
+        <label>Company Name:<span style="color: red;">*</label>
         <input type="text" name="company_name" required />
 
-        <label>Industry:</label>
+        <label>Industry:<span style="color: red;">*</label>
         <select name="industry" id="industry" required>
           <option value="">Select industry</option>
           <option>IT</option>
@@ -190,10 +190,10 @@
         </select>
         <input type="text" name="industry_other" id="industry_other" class="hidden" placeholder="Please specify industry..." />
 
-        <label>Location:</label>
+        <label>Location:<span style="color: red;">*</label>
         <input type="text" name="location" required />
 
-        <label>Priority Level:</label>
+        <label>Priority Level:<span style="color: red;">*</label>
         <div class="priority-buttons">
           <input type="radio" id="priority-high" name="priority" value="High" hidden required>
           <label for="priority-high" class="priority-btn">🔴 High</label>
@@ -208,7 +208,7 @@
 
       <fieldset>
         <legend>Automation Requirements & Details</legend>
-        <label>Automation Goal:</label>
+        <label>Automation Goal:<span style="color: red;">*</label>
         <textarea class="bulleted" name="automation_goal" rows="4" required placeholder="e.g.,To streamline client onboarding and document processing for faster turnaround and reduced manual errors."></textarea>
 
         <label>Current Workflow:</label>
@@ -249,7 +249,7 @@
 
       <fieldset>
         <legend>Submitted By</legend>
-        <label>Sales Executive:</label>
+        <label>Sales Executive:<span style="color: red;">*</label>
         <select name="sales_exec" required>
           <option value="">Select</option>
           <option>Jerjish</option>
@@ -257,7 +257,7 @@
           <option>Ashwin</option>
         </select>
 
-        <label>Date:</label>
+        <label>Date:<span style="color: red;">*</label>
         <input type="date" name="submitted_date" placeholder="Select date..." required />
       </fieldset>
 
