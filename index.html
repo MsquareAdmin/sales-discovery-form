@@ -319,6 +319,10 @@
       document.getElementById('industry_other').classList.toggle('hidden', this.value !== 'Other');
     });
 
+ document.getElementById('category').addEventListener('change', function () {
+      document.getElementById('category_other').classList.toggle('hidden', this.value !== 'Other');
+    });
+
     document.getElementById('preferred_platforms').addEventListener('change', function () {
       document.getElementById('preferred_platforms_other').classList.toggle('hidden', this.value !== 'Other');
     });
