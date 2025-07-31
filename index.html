@@ -343,6 +343,9 @@
         e.preventDefault();
       }
     });
+// Prefill today's date in the submitted_date input
+const today = now.toISOString().split('T')[0];
+document.querySelector('input[name="submitted_date"]').value = today;
 
     refInput.addEventListener('paste', e => e.preventDefault());
 
