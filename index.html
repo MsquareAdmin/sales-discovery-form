@@ -180,15 +180,28 @@
         <label>Industry:<span style="color: red;">*</label>
         <select name="industry" id="industry" required>
           <option value="">Select industry</option>
+          <option>Health Care</option>
           <option>IT</option>
-          <option>Real Estate</option>
-          <option>Manufacturing</option>
-          <option>Healthcare</option>
           <option>Education</option>
-          <option>Finance</option>
+          <option>Media & Entertainment</option>
           <option value="Other">Other</option>
         </select>
         <input type="text" name="industry_other" id="industry_other" class="hidden" placeholder="Please specify industry..." />
+
+
+        <label>Category:<span style="color: red;">*</label>
+        <select name="category" id="category" required>
+          <option value="">Select category</option>
+          <option>Marketing</option>
+          <option>Sales</option>
+          <option>HR</option>
+          <option>Accounts</option>
+          <option>Operations</option>
+          <option>Admin</option>
+          <option>Automation</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="category_other" id="category_other" class="hidden" placeholder="Please specify category..." />
 
         <label>Location:<span style="color: red;">*</label>
         <input type="text" name="location" required />
