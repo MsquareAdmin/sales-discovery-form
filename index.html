@@ -174,8 +174,18 @@
 
       <fieldset>
         <legend>Client Information</legend>
+         <label>Company Name:</label>
+        <input type="text" name="company_name"  />
+
         <label>Client Name:<span style="color: red;">*</label>
         <input type="text" name="client_name" required />
+
+        <label>Client Email:<span style="color: red;">*</label>
+        <input type="text" name="client_email" required />
+
+
+        <label>Address:<span style="color: red;">*</label>
+        <input type="text" name="address" required />
 
         <label>Industry:<span style="color: red;">*</label>
         <select name="industry" id="industry" required>
@@ -203,8 +213,7 @@
         </select>
         <input type="text" name="category_other" id="category_other" class="hidden" placeholder="Please specify category..." />
 
-        <label>Location:<span style="color: red;">*</label>
-        <input type="text" name="location" required />
+
 
         <label>Priority Level:<span style="color: red;">*</label>
         <div class="priority-buttons">
